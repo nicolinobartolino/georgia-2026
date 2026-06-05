@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Georgia 2026 — Nico & Hannah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!--
+  GEORGIA 2026 — TRIP SKELETON
+  Nico (London) + Hannah (Zurich) · TCT Upper Svaneti
+
+  HOW TO EDIT
+  ───────────────────────────────────────────────────
+  Each day is a <div class="day"> block.
+  Set status="" (blank), "tbc", "confirmed", or "done"
+  to update the left border indicator.
+
+  Edit .context for the one-liner per day.
+  Edit .stay for accommodation links as you book them.
+  Edit .warn for any flags you want to keep visible.
+
+  Last-updated reads the file modification date automatically.
+-->
+
+<style>
+  :root {
+    --cream:     #F6F2EB;
+    --paper:     #FDFAF6;
+    --ink:       #1C1A16;
+    --ink-mute:  #706E67;
+    --ink-dim:   #A8A69F;
+    --border:    rgba(28,26,22,0.10);
+    --border-md: rgba(28,26,22,0.18);
+    --rust:      #B84C2A;
+    --rust-bg:   #F5E9E4;
+    --pine:      #2E5943;
+    --pine-bg:   #E5EFE9;
+    --slate:     #2B4063;
+    --slate-bg:  #E6EBF4;
+    --amber:     #8C5E10;
+    --amber-bg:  #F5EDD9;
+    --purple:    #4A3880;
+    --purple-bg: #EDEBF7;
+    --radius:    5px;
+    --font-disp: 'Cormorant', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--slate); text-decoration: none; border-bottom: 1px dotted var(--slate); }
+  a:hover { color: var(--ink); border-color: var(--ink); }
+
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 48px 28px 88px;
+  }
+
+  /* ── HEADER ─── */
+  header {
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1.5px solid var(--ink);
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--font-disp);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.3px;
+  }
+  h1 em { font-style: italic; color: var(--rust); }
+  .header-right {
+    text-align: right;
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.75;
+  }
+  .header-right strong { display: block; font-size: 14.5px; color: var(--ink); font-weight: 500; }
+
+  /* ── STATS ROW ─── */
+  .stats {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .stat {
+    flex: 1;
+    min-width: 95px;
+    padding: 10px 14px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-dim);
+    font-weight: 500;
+  }
+  .stat-value {
+    font-family: var(--font-disp);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-top: 2px;
+  }
+
+  /* ── META BAR ─── */
+  .meta-bar {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+  .updated-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--pine); flex-shrink: 0; display: inline-block; vertical-align: middle; margin-right: 2px; }
+  .meta-bar em { font-style: italic; color: var(--ink-mute); }
+
+  /* ── TRIP SHAPE BAR ─── */
+  .shape-wrap { margin-bottom: 28px; }
+  .shape-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+    font-weight: 500;
+    margin-bottom: 7px;
+  }
+  .shape-bar {
+    display: flex;
+    gap: 2px;
+    height: 30px;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .shape-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 5px;
+  }
+  .shape-seg.arr  { background: var(--slate-bg); color: var(--slate); flex: 1; }
+  .shape-seg.leg1 { background: #E4EDF6;         color: #1E3A5F;      flex: 5; }
+  .shape-seg.hub  { background: var(--amber-bg); color: var(--amber); flex: 1.2; }
+  .shape-seg.leg2 { background: #E9EFF6;         color: #253D5C;      flex: 4; }
+  .shape-seg.ushg { background: var(--pine-bg);  color: var(--pine);  flex: 1.5; }
+  .shape-seg.ret  { background: var(--cream);    color: var(--ink-mute); flex: 2; border: 1px solid var(--border); }
+  .shape-dates {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10.5px;
+    color: var(--ink-dim);
+    margin-top: 5px;
+    padding: 0 1px;
+  }
+
+  /* ── FLIGHT STRIP ─── */
+  .flight-strip {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: var(--paper);
+    flex-wrap: wrap;
+  }
+  .fl-col {
+    flex: 1;
+    min-width: 160px;
+    padding: 11px 15px;
+    border-right: 1px solid var(--border);
+  }
+  .fl-col:last-child { border-right: none; }
+  .fl-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-dim); font-weight: 500; }
+  .fl-value { font-size: 14px; color: var(--ink); font-weight: 500; margin-top: 2px; }
+  .fl-sub   { font-size: 12px; color: var(--ink-mute); margin-top: 2px; }
+
+  /* ── LEGEND ─── */
+  .legend {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-bottom: 22px;
+  }
+
+  /* ── SECTION ─── */
+  .section { margin-bottom: 30px; }
+  .section-sub {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    margin-bottom: 9px;
+    padding-left: 2px;
+  }
+
+  /* ── DIVIDER ─── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 26px 0 12px;
+  }
+  .divider-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-mute);
+    white-space: nowrap;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ── DAY ROW ─── */
+  .day {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: var(--paper);
+  }
+  .day:first-of-type { border-radius: var(--radius) var(--radius) 0 0; }
+  .day:last-of-type  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: 1px solid var(--border); }
+  .day:only-of-type  { border-radius: var(--radius); border-bottom: 1px solid var(--border); }
+
+  .day[status="confirmed"] { border-left: 3px solid var(--pine); }
+  .day[status="done"]      { border-left: 3px solid var(--ink-dim); }
+  .day[status="tbc"]       { border-left: 3px solid var(--amber); }
+
+  .day-date {
+    padding: 12px 6px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    text-align: center;
+  }
+  .day-n {
+    font-family: var(--font-disp);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .day-d {
+    font-size: 10px;
+    color: var(--ink-mute);
+    line-height: 1.45;
+  }
+
+  .day-body { padding: 12px 15px; }
+
+  .day-top {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .day-title {
+    font-family: var(--font-disp);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .day-km {
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-weight: 300;
+    flex-shrink: 0;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .b-hard  { background: var(--rust-bg);   color: var(--rust);   }
+  .b-rest  { background: var(--pine-bg);   color: var(--pine);   }
+  .b-trans { background: var(--slate-bg);  color: var(--slate);  }
+  .b-side  { background: var(--purple-bg); color: var(--purple); }
+
+  .context {
+    font-size: 13px;
+    color: var(--ink-mute);
+    line-height: 1.55;
+    margin-top: 2px;
+  }
+
+  .warn {
+    font-size: 12.5px;
+    color: var(--rust);
+    margin-top: 6px;
+    padding: 5px 9px;
+    background: var(--rust-bg);
+    border-left: 2px solid var(--rust);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .stay {
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    margin-top: 5px;
+  }
+  .stay strong { color: var(--ink-mute); font-weight: 500; margin-right: 3px; }
+
+  /* ── END OPTIONS ─── */
+  .options-intro {
+    font-size: 13.5px;
+    color: var(--ink-mute);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 560px) { .options-grid { grid-template-columns: 1fr; } }
+
+  .opt-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--paper);
+    overflow: hidden;
+  }
+  .opt-head {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .opt-title {
+    font-family: var(--font-disp);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .opt-body { padding: 12px 14px; }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 10px 1fr;
+    gap: 9px;
+    font-size: 13px;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+    line-height: 1.5;
+    align-items: start;
+  }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-dot { width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .tl-item strong { color: var(--ink); font-weight: 500; }
+
+  /* ── BOTTOM GRID ─── */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 560px) { .bottom-grid { grid-template-columns: 1fr; } }
+
+  .b-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    background: var(--paper);
+  }
+  .b-card-title {
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-dim);
+    margin-bottom: 9px;
+  }
+  .b-card p  { font-size: 13px; color: var(--ink-mute); line-height: 1.6; }
+  .b-card ul { font-size: 13px; color: var(--ink-mute); padding-left: 14px; line-height: 1.9; }
+  .b-card ul li::marker { color: var(--ink-dim); }
+
+  /* ── FOOTER ─── */
+  footer {
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--ink-dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+
+  /* ── PHOTOS ─── */
+  .day-photo {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .day-photo img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    display: block;
+  }
+  .day-photo img.placeholder {
+    background: var(--cream);
+    border: 1px dashed var(--border-md);
+    height: 200px;
+    display: flex;
+  }
+  .day-photo .photo-caption {
+    font-size: 11px;
+    color: var(--ink-dim);
+    margin-top: 5px;
+    font-style: italic;
+  }
+  /* placeholder shown when image missing */
+  .day-photo .photo-placeholder {
+    width: 100%;
+    height: 200px;
+    border-radius: var(--radius);
+    border: 1px dashed var(--border-md);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--ink-dim);
+    font-style: italic;
+  }
+  @media print {
+    body { background: white; }
+    .page { padding: 20px 16px; }
+    .day, .section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header>
+  <div class="header-row">
+    <div>
+      <p style="font-size:11px;text-transform:uppercase;letter-spacing:0.09em;color:var(--ink-mute);margin-bottom:6px;">TCT Upper Svaneti · Georgia</p>
+      <h1>Nico &amp; Hannah<br><em>Georgia 2026</em></h1>
+    </div>
+    <div class="header-right">
+      <strong>29 Aug → 12 Sep</strong>
+      London + Zurich → Kutaisi<br>
+      Pegasus via Istanbul (IST)
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">14 days</div>
+      <div class="stat-label" style="margin-top:1px;">13 nights</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Hiking distance</div>
+      <div class="stat-value">~110 km</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Hiking days</div>
+      <div class="stat-value">~11</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Max elevation</div>
+      <div class="stat-value">2,941 m</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Arrive KUT</div>
+      <div class="stat-value">3:40 am</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Depart KUT</div>
+      <div class="stat-value">~4:45 am</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ META BAR ════════════════════════════════════════════ -->
+<div class="meta-bar">
+  <span><span class="updated-dot"></span> Last updated: <span id="last-updated">—</span></span>
+  <span style="color:var(--border-md);">·</span>
+  <em>Skeleton built from all referenced links in the planning doc — nothing booked yet</em>
+</div>
+
+<!-- ══ TRIP SHAPE ═══════════════════════════════════════════ -->
+<div class="shape-wrap">
+  <div class="shape-label">Trip shape — 14 days / 13 nights</div>
+  <div class="shape-bar">
+    <div class="shape-seg arr">Arrive</div>
+    <div class="shape-seg leg1">Leg 1 — Western TCT (5 days)</div>
+    <div class="shape-seg hub">Mestia</div>
+    <div class="shape-seg leg2">Leg 2 — Eastern TCT (4 days)</div>
+    <div class="shape-seg ushg">Ushguli</div>
+    <div class="shape-seg ret">Return / end</div>
+  </div>
+  <div class="shape-dates">
+    <span>30 Aug</span>
+    <span>31 Aug</span>
+    <span>3 Sep</span>
+    <span>4 Sep</span>
+    <span>8 Sep</span>
+    <span>9–12 Sep</span>
+  </div>
+</div>
+
+<!-- ══ FLIGHTS ══════════════════════════════════════════════ -->
+<div class="flight-strip">
+  <div class="fl-col">
+    <div class="fl-label">Nico</div>
+    <div class="fl-value">London (any) → Istanbul → Kutaisi</div>
+    <div class="fl-sub">Departs Sat 29 Aug ~16:00</div>
+  </div>
+  <div class="fl-col">
+    <div class="fl-label">Hannah</div>
+    <div class="fl-value">Zurich (ZRH) → Istanbul → Kutaisi</div>
+    <div class="fl-sub">Departs Sat 29 Aug ~16:45</div>
+  </div>
+  <div class="fl-col">
+    <div class="fl-label">Meet up</div>
+    <div class="fl-value">Istanbul (IST) — same onward flight</div>
+    <div class="fl-sub">Arrive KUT together ~3:40 am Sun 30 Aug</div>
+  </div>
+  <div class="fl-col">
+    <div class="fl-label">Return</div>
+    <div class="fl-value">Kutaisi → Istanbul → split home</div>
+    <div class="fl-sub">Depart KUT ~4:45 am Sat 12 Sep · at airport 2:30 am</div>
+  </div>
+</div>
+
+<!-- ══ LEGEND ═══════════════════════════════════════════════ -->
+<div class="legend">
+  <span>Day type:</span>
+  <span class="badge b-trans">transfer</span>
+  <span class="badge b-hard">hard</span>
+  <span class="badge b-rest">rest / detour</span>
+  <span class="badge b-side">side trip</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ARRIVAL
+═══════════════════════════════════════════════════════════ -->
+<div class="divider"><span class="divider-label">✈ Arrival</span><div class="divider-line"></div></div>
+<div class="section">
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">1</div><div class="day-d">Sun<br>30 Aug</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Kutaisi — land &amp; rest</span>
+        <span class="badge b-trans">transfer</span>
+      </div>
+      <div class="context">Land 3:40 am. Clear bags, taxi to city (~15 min). Sleep. Afternoon free — Gelati Monastery, Bagrati Cathedral, old town worth a look. Book private transfer for tomorrow morning.</div>
+      <div class="warn">⚑ Arriving ~4 am needs a guesthouse that can handle early check-in or the night before held. TBC.</div>
+      <div class="stay"><strong>Sleep:</strong> Kutaisi — <a href="#">add link when booked</a></div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">2</div><div class="day-d">Mon<br>31 Aug</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Kutaisi → Etseri</span>
+        <span class="badge b-trans">transfer</span>
+        <span class="day-km">~4–5 hrs · private transfer</span>
+      </div>
+      <div class="context">Private transfer via Zugdidi along the Enguri gorge road. Arrive Etseri mid-afternoon. The only shop between here and Mestia is at Hanmer Guesthouse in Etseri — stock up on trail supplies on arrival.</div>
+      <div class="stay"><strong>Sleep:</strong> Etseri — Hanmer GH / Guest House Eceri / Gujejiani GH &nbsp;<a href="https://www.booking.com/searchresults.en-gb.html?ss=Etseri%2C+Georgia" target="_blank">booking.com</a></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     LEG 1 — WESTERN TCT
+═══════════════════════════════════════════════════════════ -->
+<div class="divider"><span class="divider-label">🥾 Leg 1 — Western TCT (Etseri → Mestia)</span><div class="divider-line"></div></div>
+<div class="section">
+  <div class="section-sub">~70 km &nbsp;·&nbsp; ~+5,500 m &nbsp;·&nbsp; 2 major passes (2,419 m + 2,930 m) &nbsp;·&nbsp; remote, less-trafficked, no crowds</div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">3</div><div class="day-d">Tue<br>1 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Etseri → Mazeri via Baki Pass</span>
+        <span class="badge b-hard">hard</span>
+        <span class="day-km">~22 km &nbsp;·&nbsp; +1,000 m &nbsp;·&nbsp; pass at 2,419 m</span>
+      </div>
+      <div class="context">1,000 m climb to Baki Pass with ruins of an 11th-century church at the top, first big views of Mount Ushba's twin towers, long fir-forest descent into Mazeri valley. Carry 2 L — dry section near the pass.</div>
+      <div class="stay"><strong>Sleep:</strong> Mazeri — Shuan GH / Ushba Cottages / Hotel Lamala / Grand Hotel Ushba</div>
+      <div class="day-photo">
+        <!-- DROP PHOTO: photos/baki-pass.jpg -->
+        <img src="photos/baki-pass.jpg" alt="View of Mount Ushba from Baki Pass"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder" style="display:none;">📷 drop photos/baki-pass.jpg here</div>
+        <div class="photo-caption">View of Mount Ushba from Baki Pass</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">4</div><div class="day-d">Wed<br>2 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Mazeri — Shdugra Waterfall &amp; Ushba Glacier</span>
+        <span class="badge b-side">side trip</span>
+        <span class="day-km">~12 km return &nbsp;·&nbsp; +1,000 m &nbsp;·&nbsp; no pack</span>
+      </div>
+      <div class="context">2nd night in Mazeri. Day hike up the Dolra river to Georgia's highest waterfall (100 m drop) then on to the Ushba glacier viewpoint.</div>
+      <div class="stay"><strong>Sleep:</strong> Mazeri — same as Day 3</div>
+      <div class="day-photo">
+        <!-- DROP PHOTO: photos/shdugra-waterfall.jpg -->
+        <img src="photos/shdugra-waterfall.jpg" alt="Shdugra Waterfall, Mazeri valley"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder" style="display:none;">📷 drop photos/shdugra-waterfall.jpg here</div>
+        <div class="photo-caption">Shdugra Waterfall, Mazeri valley</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">5</div><div class="day-d">Thu<br>3 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Mazeri → Mestia via Guli Pass</span>
+        <span class="badge b-hard">hard</span>
+        <span class="day-km">~19 km &nbsp;·&nbsp; +1,560 m &nbsp;·&nbsp; pass at 2,930 m</span>
+      </div>
+      <div class="context">The biggest day of the whole trip. Long grind to Guli Pass with Tetnuldi views from the top, serious descent into Mestia. Arrive tired but in civilisation — restaurants, supermarket, hot showers. Resupply here for the eastern leg.</div>
+      <div class="warn">⚑ Carry 2 L from Mazeri. Dry near the pass. Start early.</div>
+      <div class="stay"><strong>Sleep:</strong> Mestia — A-Frame / Cottage Mida / many options</div>
+      <div class="day-photo">
+        <!-- DROP PHOTO: photos/guli-pass.jpg -->
+        <img src="photos/guli-pass.jpg" alt="Guli Pass (2,930 m) — Tetnuldi behind"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder" style="display:none;">📷 drop photos/guli-pass.jpg here</div>
+        <div class="photo-caption">Guli Pass (2,930 m) — Tetnuldi behind</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">6</div><div class="day-d">Fri<br>4 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Mestia — rest / Koruldi Lakes</span>
+        <span class="badge b-rest">rest / detour</span>
+        <span class="day-km">Koruldi: ~16 km return &nbsp;·&nbsp; +1,100 m &nbsp;·&nbsp; optional</span>
+      </div>
+      <div class="context">Proper rest day, or Koruldi Lakes day hike if legs allow — 360° Caucasus panorama, 4×4 lift option to save the climb. Best vegan food options until Tbilisi. Resupply, laundry, Svaneti Museum.</div>
+      <div class="stay"><strong>Sleep:</strong> Mestia — 2nd night</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     LEG 2 — EASTERN TCT
+═══════════════════════════════════════════════════════════ -->
+<div class="divider"><span class="divider-label">🥾 Leg 2 — Eastern TCT (Mestia → Ushguli)</span><div class="divider-line"></div></div>
+<div class="section">
+  <div class="section-sub">~56 km &nbsp;·&nbsp; ~+3,400 m &nbsp;·&nbsp; max 2,719 m &nbsp;·&nbsp; well-marked, busier &nbsp;·&nbsp; river crossing on Day 9</div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">7</div><div class="day-d">Sat<br>5 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Mestia → Zhabeshi</span>
+        <span class="day-km">~15 km &nbsp;·&nbsp; +450 m &nbsp;·&nbsp; easy–moderate</span>
+      </div>
+      <div class="context">First day of the classic eastern leg. Forests, rolling meadows, Svan towers. Ushba and Chatyn-Tau peaks visible behind. Gentle intro after the hard western section.</div>
+      <div class="stay"><strong>Sleep:</strong> Zhabeshi — Guesthouse Victor / Lali Guesthouse</div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">8</div><div class="day-d">Sun<br>6 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Zhabeshi → Adishi</span>
+        <span class="day-km">~10 km &nbsp;·&nbsp; +1,120 m &nbsp;·&nbsp; medium</span>
+      </div>
+      <div class="context">Short in distance, climby. Crosses the Tetnuldi ski area. Arrive early in tiny Adishi — proper medieval Svan tower village. Good afternoon to rest before the river crossing next day.</div>
+      <div class="stay"><strong>Sleep:</strong> Adishi — Khalde Guesthouse / Stone House Adishi</div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">9</div><div class="day-d">Mon<br>7 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Adishi → Iprari via Chkhunderi Pass</span>
+        <span class="badge b-hard">hard</span>
+        <span class="day-km">~16 km &nbsp;·&nbsp; +790 m &nbsp;·&nbsp; pass at 2,719 m</span>
+      </div>
+      <div class="context">Highlight of the eastern leg — glacier views from Chkhunderi Pass, dramatic descent, then the Adishchala river crossing. River rises all day as ice melts above; horse crossing available in Adishi if needed.</div>
+      <div class="warn">⚑ Start early — cross the river before midday. Ask the guesthouse owner the night before for current conditions.</div>
+      <div class="stay"><strong>Sleep:</strong> Iprari — Betegi Guesthouse</div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">10</div><div class="day-d">Tue<br>8 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Iprari → Ushguli</span>
+        <span class="day-km">~9 km &nbsp;·&nbsp; +460 m &nbsp;·&nbsp; easy</span>
+      </div>
+      <div class="context">Short, enjoyable finish. Arrive with afternoon to explore Ushguli — UNESCO World Heritage, medieval Svan towers, one of the highest continuously inhabited villages in Europe, Shkhara (5,193 m) above.</div>
+      <div class="stay"><strong>Sleep:</strong> Ushguli — Guesthouse Angelina / Old Tower Guesthouse</div>
+      <div class="day-photo">
+        <!-- DROP PHOTO: photos/ushguli.jpg -->
+        <img src="photos/ushguli.jpg" alt="Ushguli — Svan towers below Shkhara"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-placeholder" style="display:none;">📷 drop photos/ushguli.jpg here</div>
+        <div class="photo-caption">Ushguli — Svan towers below Shkhara</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day" status="">
+    <div class="day-date"><div class="day-n">11</div><div class="day-d">Wed<br>9 Sep</div></div>
+    <div class="day-body">
+      <div class="day-top">
+        <span class="day-title">Ushguli — Shkhara Glacier</span>
+        <span class="badge b-side">side trip</span>
+        <span class="day-km">~16 km return &nbsp;·&nbsp; gentle gradient</span>
+      </div>
+      <div class="context">2nd night in Ushguli. Out-and-back along the Enguri Valley to the foot of Georgia's highest peak. Easy terrain, enormous scale. Can flex to a full rest day — Ushguli itself rewards slow exploration.</div>
+      <div class="stay"><strong>Sleep:</strong> Ushguli — 2nd night</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     END OF HIKE — TWO OPTIONS
+═══════════════════════════════════════════════════════════ -->
+<div class="divider"><span class="divider-label">🚐 End of hike — how do we want to finish?</span><div class="divider-line"></div></div>
+
+<p class="options-intro">From Ushguli we have ~3 nights before the Sep 12 flight. Hard deadline: at KUT airport by 2:30 am. Both options work — it's a question of whether we want a Tbilisi night or not.</p>
+
+<div class="options-grid">
+
+  <div class="opt-card">
+    <div class="opt-head">
+      <span class="opt-title">Option A — Kutaisi only</span>
+      <span class="badge b-rest">simpler</span>
+    </div>
+    <div class="opt-body">
+      <div class="tl-item"><div class="tl-dot" style="background:var(--pine);"></div><div><strong>D12 · Thu 10 Sep</strong> — Ushguli → Mestia shared taxi (~1 hr) → Kutaisi marshrutka or taxi (~4–5 hrs). Arrive early evening.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--amber);"></div><div><strong>D13 · Fri 11 Sep</strong> — Kutaisi full day. Gelati, Bagrati, old town.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--slate);"></div><div><strong>D14 · Sat 12 Sep</strong> — Airport by 2:30 am. Taxi from Kutaisi city ~15 min.</div></div>
+    </div>
+  </div>
+
+  <div class="opt-card">
+    <div class="opt-head">
+      <span class="opt-title">Option B — add Tbilisi</span>
+      <span class="badge b-side">recommended</span>
+    </div>
+    <div class="opt-body">
+      <div class="tl-item"><div class="tl-dot" style="background:var(--pine);"></div><div><strong>D12 · Thu 10 Sep</strong> — Same return to Kutaisi (~5–6 hrs). Continue to Tbilisi by marshrutka (~3 hrs) — arrive evening.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--purple);"></div><div><strong>D13 · Fri 11 Sep</strong> — Full day Tbilisi. Old town, Narikala, sulphur baths. Best vegan food of the whole trip.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--rust);"></div><div><strong>D13 evening ~8 pm</strong> — Private taxi Tbilisi → Kutaisi (~3 hrs, ~£20 / ~75 GEL). Arrive ~11 pm.</div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:var(--slate);"></div><div><strong>D14 · Sat 12 Sep</strong> — Airport by 2:30 am.</div></div>
+      <div class="warn" style="margin-top:8px;">⚑ Book the Sep 11 Tbilisi → Kutaisi taxi in advance. Don't rely on marshrutka timing for this leg.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     BOTTOM NOTES
+═══════════════════════════════════════════════════════════ -->
+<div class="divider"><span class="divider-label">📋 Reference</span><div class="divider-line"></div></div>
+
+<div class="bottom-grid">
+
+  <div class="b-card">
+    <div class="b-card-title">🌱 Vegan — safe dishes everywhere</div>
+    <ul>
+      <li>Lobio — bean stew</li>
+      <li>Pkhali — walnut &amp; herb pâtés</li>
+      <li>Badrijani nigvzit — aubergine/walnut rolls</li>
+      <li>Ajapsandali — slow-cooked vegetable stew</li>
+      <li>Mchadi — cornbread</li>
+      <li>Mexican fries — potato wedges, Georgian spices</li>
+      <li>Tomato &amp; cucumber salad</li>
+    </ul>
+    <p style="margin-top:9px;"><strong>Watch:</strong> Lobiani &amp; spinach breads may contain egg. Khachapuri has cheese. Carry trail snacks — options thin out west of Mestia. Contact each guesthouse before arrival with dietary needs.</p>
+  </div>
+
+  <div class="b-card">
+    <div class="b-card-title">💸 Budget benchmarks</div>
+    <ul>
+      <li>Flights: <strong>~£350/person</strong> return (Pegasus via IST)</li>
+      <li>Guesthouses: <strong>~£19–22/person</strong> (70–80 GEL) incl. dinner &amp; breakfast</li>
+      <li>Transfer Kutaisi → Etseri: <strong>~£40–55 total</strong> (150–200 GEL)</li>
+      <li>Marshrutka Kutaisi ↔ Tbilisi: <strong>~£4/person</strong> (15–20 GEL)</li>
+      <li>Private taxi Tbilisi → Kutaisi: <strong>~£20 total</strong> (75 GEL)</li>
+      <li>Ushguli → Mestia shared taxi: <strong>~£8/person</strong> (30–40 GEL)</li>
+    </ul>
+    <p style="margin-top:6px;font-size:12px;color:var(--ink-dim);">1 GEL ≈ £0.27. Verify before travel.</p>
+  </div>
+
+  <div class="b-card">
+    <div class="b-card-title">⚠ Book these first</div>
+    <ul>
+      <li><strong>Adishi + Iprari</strong> — tiny villages, very limited capacity</li>
+      <li><strong>Etseri</strong> — only a handful of guesthouses</li>
+      <li>All guesthouses: email dietary needs when booking</li>
+      <li>Private transfer Kutaisi → Etseri</li>
+      <li>Sep 11 taxi Tbilisi → Kutaisi (if Option B)</li>
+    </ul>
+  </div>
+
+  <div class="b-card">
+    <div class="b-card-title">🔗 Sources</div>
+    <ul>
+      <li><a href="https://www.goingthewholehogg.com/transcaucasian-trail-svaneti-chuberi-to-mestia/" target="_blank">GTWH — Chuberi to Mestia</a></li>
+      <li><a href="https://www.goingthewholehogg.com/transcaucasian-trail-svaneti-mestia-to-ushguli/" target="_blank">GTWH — Mestia to Ushguli</a></li>
+      <li><a href="https://transcaucasiantrail.org/en/hike/upper-svaneti-georgia/" target="_blank">TCT official — Upper Svaneti</a></li>
+      <li><a href="https://noplacelikeoutside.be/7-day-hike-in-upper-svaneti-georgia/" target="_blank">No Place Like Outside — overview</a></li>
+      <li><a href="https://epicexpeditions.co/georgia/svaneti-trekking-expedition/" target="_blank">Epic Expeditions — 14-day itinerary</a></li>
+      <li><a href="https://caltopo.com/m/27711" target="_blank">CalTopo — interactive map</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer>
+  <span>Georgia 2026 · Nico &amp; Hannah · TCT Upper Svaneti · skeleton</span>
+  <span>Set status="" on each day as things get confirmed</span>
+</footer>
+
+</div>
+<script>
+  const el = document.getElementById('last-updated');
+  const d = new Date(document.lastModified);
+  if (d && !isNaN(d)) {
+    el.textContent = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+</script>
+</body>
+</html>
